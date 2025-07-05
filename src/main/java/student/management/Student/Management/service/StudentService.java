@@ -24,10 +24,7 @@ public class StudentService {
     }
 
     public List<Student> searchStudentList() {
-        return repository.search();
-    }
 
-    public List<Student> searchStudentList30s(){
         List<Student> students = repository.search();
         return students.stream()
                 .filter(v -> v.getAge() >= 30 && v.getAge() < 40)
@@ -36,10 +33,7 @@ public class StudentService {
         }
 
     public List<StudentCourse> searchStudentCourseList() {
-        return courseRepository.courseSearch();
-    }
 
-    public List<StudentCourse> studentCourseListByName(){
         List<StudentCourse> studentCourses = courseRepository.courseSearch();
         return studentCourses.stream()
                 .filter(studentCourse -> "Javaコース".equals(studentCourse.getCourseName()))
