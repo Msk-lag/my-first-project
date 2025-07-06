@@ -8,7 +8,7 @@ import java.sql.Date;
 @Getter
 @Setter
 
-public class StudentCourse {
+public class StudentCourses {
 
     private String courseId;
     private String studentId;
