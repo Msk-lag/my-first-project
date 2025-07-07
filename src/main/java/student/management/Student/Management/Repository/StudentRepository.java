@@ -12,7 +12,7 @@ import java.util.List;
 
 @Mapper
 public interface StudentRepository {
-    @Select("SELECT*FROM students")
+    @Select("SELECT * FROM students")
     List<Student> search();
 
 }
