@@ -15,4 +15,13 @@ public interface StudentRepository {
     @Select("SELECT * FROM students")
     List<Student> search();
 
+    @Select("SELECT COALESCE(MAX(id), 0) FROM students")
+    int getMaxId();
+
+
+    @Insert("""
+            INSERT INTO students (id,fullname, furigana, nick_name, email, address, age, gender, remark)
+            VALUES ( #{id},#{fullName}, #{furigana}, #{nickName}, #{email}, #{address}, #{age}, #{gender}, #{remark})
+            """)
+    void insert(Student student);
 }
