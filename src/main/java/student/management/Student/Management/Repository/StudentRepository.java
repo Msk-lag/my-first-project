@@ -24,4 +24,24 @@ public interface StudentRepository {
             VALUES ( #{id},#{fullName}, #{furigana}, #{nickName}, #{email}, #{address}, #{age}, #{gender}, #{remark})
             """)
     void insert(Student student);
+
+    @Update("""
+            UPDATE  students 
+            SET fullname = #{fullName},
+                furigana = #{furigana},
+                nick_name = #{nickName},             
+                email = #{email},
+                address = #{address},
+                age = #{age},
+                gender = #{gender},
+                remark = #{remark}
+            WHERE id = #{id}    
+            """)
+    void update(Student student);
+
+    @Select("SELECT * FROM students WHERE id = #{id}")
+    Student findById(String id);
+
+
+
 }
