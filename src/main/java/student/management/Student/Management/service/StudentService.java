@@ -14,7 +14,6 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class StudentService {
@@ -59,10 +58,13 @@ public class StudentService {
         }
 
     }
+
     public StudentDetail getStudentDetailById(String id) {
         Student student = repository.findById(id);
+        List<StudentCourses> courses = courseRepository.findByStudentId(id);
         StudentDetail detail = new StudentDetail();
         detail.setStudent(student);
+        detail.setStudentCourses(courses);
         return detail;
     }
 
@@ -71,8 +73,10 @@ public class StudentService {
     public void updateStudentDetail(StudentDetail studentDetail) {
         Student student = studentDetail.getStudent();
         repository.update(student);
+        for (StudentCourses course : studentDetail.getStudentCourses()) {
+            courseRepository.update(course);
+        }
+
+
     }
-
-
-
 }

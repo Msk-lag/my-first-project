@@ -24,5 +24,19 @@ public interface StudentCourseRepository {
     void insert(StudentCourses course);
 
 
+    @Update("""
+            UPDATE  students_course
+            SET course_name = #{courseName}
+            
+            WHERE student_id = #{studentId} AND course_id = #{courseId}
+            """)
+    void update(StudentCourses course);
+
+
+    @Select("SELECT * FROM students_course WHERE student_id = #{studentId}")
+    List<StudentCourses> findByStudentId(String studentId);
+
+
+
 
 }

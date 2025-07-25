@@ -12,35 +12,34 @@ import java.util.List;
 
 @Mapper
 public interface StudentRepository {
-    @Select("SELECT * FROM students")
+    @Select("SELECT * FROM students WHERE is_deleted = false")
     List<Student> search();
 
-    @Select("SELECT COALESCE(MAX(id), 0) FROM students")
-    int getMaxId();
+    @Select("SELECT * FROM students WHERE id = #{id}")
+    Student findById(String id);
 
 
     @Insert("""
-            INSERT INTO students (id,fullname, furigana, nick_name, email, address, age, gender, remark)
-            VALUES ( #{id},#{fullName}, #{furigana}, #{nickName}, #{email}, #{address}, #{age}, #{gender}, #{remark})
+            INSERT INTO students (id,fullname, furigana, nick_name, email, address, age, gender, remark,is_deleted)
+            VALUES ( #{id},#{fullName}, #{furigana}, #{nickName}, #{email}, #{address}, #{age}, #{gender}, #{remark},false)
             """)
     void insert(Student student);
 
     @Update("""
-            UPDATE  students 
+            UPDATE  students
             SET fullname = #{fullName},
                 furigana = #{furigana},
-                nick_name = #{nickName},             
+                nick_name = #{nickName},
                 email = #{email},
                 address = #{address},
                 age = #{age},
                 gender = #{gender},
-                remark = #{remark}
-            WHERE id = #{id}    
+                remark = #{remark},
+                is_deleted = #{isDeleted}
+            WHERE id = #{id}
             """)
     void update(Student student);
 
-    @Select("SELECT * FROM students WHERE id = #{id}")
-    Student findById(String id);
 
 
 

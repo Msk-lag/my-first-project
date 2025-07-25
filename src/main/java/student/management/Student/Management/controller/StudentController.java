@@ -13,11 +13,9 @@ import student.management.Student.Management.domain.StudentDetail;
 import student.management.Student.Management.service.StudentService;
 
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Controller
 
@@ -62,7 +60,6 @@ public class StudentController {
         if (result.hasErrors()) {
             return "registerStudent";
         }
-        //新規受講生情報登録
         service.saveStudentDetail(studentDetail);
         return "redirect:/studentList";
     }
