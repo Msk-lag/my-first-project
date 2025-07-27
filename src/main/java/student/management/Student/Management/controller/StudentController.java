@@ -2,6 +2,7 @@ package student.management.Student.Management.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,7 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-@Controller
+@RestController
 
 public class StudentController {
 
@@ -32,12 +33,10 @@ public class StudentController {
     }
 
     @GetMapping("/studentList")
-    public String getStudentList(Model model) {
+    public List<StudentDetail> getStudentList() {
         List<Student> students = service.searchStudentList();
         List<StudentCourses> studentCourses = service.searchStudentCourseList();
-
-        model.addAttribute("studentList", converter.convertStudentDetails(students, studentCourses));
-        return "studentList";
+        return converter.convertStudentDetails(students, studentCourses);
     }
 
 
@@ -76,12 +75,9 @@ public class StudentController {
     }
 
     @PostMapping("/updateStudent")
-    public String updateStudent(@ModelAttribute StudentDetail studentDetail, BindingResult result) {
-        if (result.hasErrors()) {
-            return "updateStudent";
-        }
+    public ResponseEntity<String> updateStudent(@RequestBody StudentDetail studentDetail) {
         service.updateStudentDetail(studentDetail);
-        return "redirect:/studentList";
+        return ResponseEntity.ok("更新処理が成功しました。");
     }
 
 
