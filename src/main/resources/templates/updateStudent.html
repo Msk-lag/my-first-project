@@ -41,7 +41,7 @@
   </div>
   <div>
     <label for="isDeleted">削除</label>
-    <input type="checkbox" id="isDeleted" th:field="*{student.Deleted}" />
+    <input type="checkbox" id="isDeleted" th:field="*{student.deleted}" />
   </div>
   <div th:each="course,stat : *{studentCourses}">
     <label for="courseName" th:for="studentCourse.__${stat.index}__.courseName">受講コース名</label>
