@@ -6,14 +6,25 @@ import student.management.Student.Management.data.Student;
 import java.util.List;
 
 /**
- * 受講生情報を扱うリポジトリ
- * 全件検索や単一条件での検索が行える
+ * 受講生情報を扱うRepository
  */
 
 @Mapper
 public interface StudentRepository {
+
+    /**
+     * 受講生の全件検索を行います
+     * @return　受講生一覧（全件）
+     */
+
     @Select("SELECT * FROM students")
     List<Student> search();
+
+    /**
+     * 受講生の検索を行います
+     * @param id 受講生ID
+     * @return　受講生
+     */
 
     @Select("SELECT * FROM students WHERE id = #{id}")
     Student findById(String id);

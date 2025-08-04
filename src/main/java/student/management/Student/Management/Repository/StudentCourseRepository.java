@@ -8,11 +8,18 @@ import student.management.Student.Management.data.StudentCourses;
 import java.util.List;
 
 /**
- * コース情報を扱うリポジトリ
- * 全件検索や単一条件での検索が行える
+ * コース情報を扱うRepository
  */
+
+
 @Mapper
 public interface StudentCourseRepository {
+
+    /**
+     * 受講生のコース情報の全件検索を行います。
+     * @return　受講生のコース情報（全件）
+     */
+
     @Select("SELECT * FROM students_course")
     List<StudentCourses> courseSearch();
 
@@ -32,6 +39,11 @@ public interface StudentCourseRepository {
             """)
     void update(StudentCourses course);
 
+    /**
+     * 受講生IDに紐づく受講生コース情報を検索します
+     * @param studentId　受講生ID
+     * @return　受講生IDに紐づく受講生コース情報
+     */
 
     @Select("SELECT * FROM students_course WHERE student_id = #{studentId}")
     List<StudentCourses> findByStudentId(String studentId);
