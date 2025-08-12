@@ -1,8 +1,10 @@
 package student.management.Student.Management.controller;
 
 
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import student.management.Student.Management.data.StudentCourse;
 import student.management.Student.Management.domain.StudentDetail;
@@ -15,7 +17,7 @@ import java.util.UUID;
 /**
  * 受講生の検索や登録、更新などを行うREST APIとして実行されるControllerです。
  */
-
+@Validated
 @RestController
 
 public class StudentController {
@@ -53,7 +55,7 @@ public class StudentController {
      *受講生詳細の登録を行います。
      *
      * @param studentDetail　受講生詳細
-     * @return　実行結果
+     * @return 実行結果
      */
     @PostMapping("/registerStudent")
     public ResponseEntity<StudentDetail> registerStudent(@RequestBody StudentDetail studentDetail) {
@@ -70,7 +72,7 @@ public class StudentController {
      * @return 受講生情報
      */
     @GetMapping("/student/{id}")
-    public StudentDetail showUpdateStudent(@PathVariable UUID id) {
+    public StudentDetail showUpdateStudent(@PathVariable  UUID id) {
         return service.getStudentDetailById(id.toString());
 
 
@@ -80,11 +82,11 @@ public class StudentController {
      * 受講生詳細の更新を行います。
      * キャンセルフラグの更新もここで行います（論理削除）
      * @param studentDetail　受講生詳細
-     * @return　実行結果
+     * @return 実行結果
      */
 
     @PutMapping("/updateStudent")
-    public ResponseEntity<String> updateStudent(@RequestBody StudentDetail studentDetail) {
+    public ResponseEntity<String> updateStudent(@RequestBody  StudentDetail studentDetail) {
         service.updateStudentDetail(studentDetail);
         return ResponseEntity.ok("更新処理が成功しました。");
     }
