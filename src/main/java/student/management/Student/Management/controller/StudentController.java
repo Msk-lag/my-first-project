@@ -1,13 +1,15 @@
 package student.management.Student.Management.controller;
 
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import student.management.Student.Management.data.StudentCourse;
 import student.management.Student.Management.domain.StudentDetail;
+import student.management.Student.Management.exceptionHandler.TestException;
 import student.management.Student.Management.service.StudentService;
 
 
@@ -40,7 +42,7 @@ public class StudentController {
      */
 
     @GetMapping("/studentList")
-    public List<StudentDetail> getStudentList() {
+    public List<StudentDetail> getStudentList(){
         return service.searchStudentList();
     }
 
@@ -58,7 +60,7 @@ public class StudentController {
      * @return 実行結果
      */
     @PostMapping("/registerStudent")
-    public ResponseEntity<StudentDetail> registerStudent(@RequestBody StudentDetail studentDetail) {
+    public ResponseEntity<StudentDetail> registerStudent(@RequestBody @Valid StudentDetail studentDetail) {
         StudentDetail responseStudentDetail = service.saveStudentDetail(studentDetail);
         return ResponseEntity.ok(responseStudentDetail);
     }
@@ -86,10 +88,28 @@ public class StudentController {
      */
 
     @PutMapping("/updateStudent")
-    public ResponseEntity<String> updateStudent(@RequestBody  StudentDetail studentDetail) {
+    public ResponseEntity<String> updateStudent(@RequestBody @Valid StudentDetail studentDetail) {
         service.updateStudentDetail(studentDetail);
         return ResponseEntity.ok("更新処理が成功しました。");
     }
+
+    /**
+     * 例外処理を確認するためのメソッド
+     */
+
+    @GetMapping("/testStudentList")
+    public List<StudentDetail> testStudentList() throws TestException {
+        throw new TestException(
+                "現在このAPIは使用できません。URLは「testStudentList」ではなく「studentList」を利用してください");
+    }
+
+
+
+
+
+
+
+
 
 
 }
