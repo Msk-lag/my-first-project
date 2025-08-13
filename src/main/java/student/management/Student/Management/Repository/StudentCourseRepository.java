@@ -4,39 +4,45 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
-import student.management.Student.Management.data.StudentCourses;
+import student.management.Student.Management.data.StudentCourse;
+
 import java.util.List;
 
 /**
- * コース情報を扱うリポジトリ
- * 全件検索や単一条件での検索が行える
+ * コース情報を扱うRepository
  */
+
+
 @Mapper
 public interface StudentCourseRepository {
-    @Select("SELECT * FROM students_course")
-    List<StudentCourses> courseSearch();
 
+    /**
+     * 受講生のコース情報の全件検索を行います。
+     * 受講生のコース情報（全件）
+     */
+    List<StudentCourse> searchStudentCourseList();
 
-    @Insert("""
-                INSERT INTO students_course (course_id, student_id, course_name, start_of_course, end_of_course)
-                VALUES (#{courseId}, #{studentId}, #{courseName}, #{startOfCourse}, #{endOfCourse})
-            """)
-    void insert(StudentCourses course);
+    /**
+     * 受講生IDに紐づく受講生コース情報を検索します
+     *
+     * @param studentId 　受講生ID
+     * 受講生IDに紐づく受講生コース情報
+     */
+    List<StudentCourse> searchStudentCourse(String studentId);
 
+    /**
+     * 受講生コース情報を新規登録します。　IDに関してはUUIDを自動で付与する.
+     *
+     * @param studentCourse 　受講生コース情報
+     */
+    void registerStudentCourse(StudentCourse studentCourse);
 
-    @Update("""
-            UPDATE  students_course
-            SET course_name = #{courseName}
-            
-            WHERE student_id = #{studentId} AND course_id = #{courseId}
-            """)
-    void update(StudentCourses course);
-
-
-    @Select("SELECT * FROM students_course WHERE student_id = #{studentId}")
-    List<StudentCourses> findByStudentId(String studentId);
-
-
+    /**
+     * 受講生コース情報のコース名を更新します。
+     *
+     * @param studentCourse 　受講生コース情報
+     */
+    void updateStudentCourse(StudentCourse studentCourse);
 
 
 }
