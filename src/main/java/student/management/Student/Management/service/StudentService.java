@@ -62,7 +62,7 @@ public class StudentService {
      */
 
     @Transactional
-    public StudentDetail saveStudentDetail(StudentDetail studentDetail) {
+    public StudentDetail registerStudent(StudentDetail studentDetail) {
         Student student = studentDetail.getStudent();
 
         String studentId = UUID.randomUUID().toString();
@@ -102,7 +102,7 @@ public class StudentService {
      * @return　受講生詳細
      */
 
-    public StudentDetail getStudentDetailById(String id) {
+    public StudentDetail searchStudent(String id) {
         Student student = repository.searchStudent(id);
         List<StudentCourse> courses = courseRepository.searchStudentCourse(id);
         return new StudentDetail(student, courses);
@@ -114,7 +114,7 @@ public class StudentService {
      * @param studentDetail　受講生詳細
      */
     @Transactional
-    public void updateStudentDetail(StudentDetail studentDetail) {
+    public void updateStudent(StudentDetail studentDetail) {
         Student student = studentDetail.getStudent();
         repository.updateStudent(student);
         for (StudentCourse course : studentDetail.getStudentCourseList()) {

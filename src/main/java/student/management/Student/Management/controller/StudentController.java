@@ -4,7 +4,6 @@ package student.management.Student.Management.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -68,7 +67,7 @@ public class StudentController {
     @Operation(summary = "受講生登録", description = "受講生を登録します。")
     @PostMapping("/registerStudent")
     public ResponseEntity<StudentDetail> registerStudent(@RequestBody @Valid StudentDetail studentDetail) {
-        StudentDetail responseStudentDetail = service.saveStudentDetail(studentDetail);
+        StudentDetail responseStudentDetail = service.registerStudent(studentDetail);
         return ResponseEntity.ok(responseStudentDetail);
     }
 
@@ -83,7 +82,7 @@ public class StudentController {
     @Operation(summary = "受講生詳細検索" ,description = "IDに紐づく任意の受講生の情報を取得します。")
     @GetMapping("/student/{id}")
     public StudentDetail showUpdateStudent(@PathVariable  UUID id) {
-        return service.getStudentDetailById(id.toString());
+        return service.searchStudent(id.toString());
 
 
     }
@@ -97,7 +96,7 @@ public class StudentController {
     @Operation(summary = "受講生更新", description = "受講生詳細の更新を行います。")
     @PutMapping("/updateStudent")
     public ResponseEntity<String> updateStudent(@RequestBody @Valid StudentDetail studentDetail) {
-        service.updateStudentDetail(studentDetail);
+        service.updateStudent(studentDetail);
         return ResponseEntity.ok("更新処理が成功しました。");
     }
 
