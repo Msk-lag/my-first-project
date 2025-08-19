@@ -5,7 +5,9 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -32,6 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @WebMvcTest(StudentController.class)
+@TestMethodOrder(MethodOrderer.MethodName.class)
 class StudentControllerTest {
 
 
@@ -75,7 +78,7 @@ class StudentControllerTest {
     }
 
     @Test
-    void 受講生詳細検索時にUUID以外の入力出されたときにサービスの呼び出しが行われないこと() throws  Exception{
+    void 受講生詳細検索時にUUID以外の入力されたときにサービスの呼び出しが行われないこと() throws  Exception{
         mockMvc.perform(get("/student/{id}","dummy"))
                 .andExpect(status().isBadRequest());
 
