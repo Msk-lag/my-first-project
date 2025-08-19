@@ -75,7 +75,7 @@ class StudentControllerTest {
     }
 
     @Test
-    void 受講生詳細検索時にUUID以外の入力出されたときにサービスの呼び出しが行われないこと() throws  Exception{
+    void 受講生詳細検索時にUUID以外の入力されたときにサービスの呼び出しが行われないこと() throws  Exception{
         mockMvc.perform(get("/student/{id}","dummy"))
                 .andExpect(status().isBadRequest());
 
