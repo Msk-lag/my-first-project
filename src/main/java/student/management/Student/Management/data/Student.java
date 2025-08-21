@@ -52,12 +52,22 @@ public class Student {
     private boolean isDeleted;
 
     //デフォルトコンストラクタ
-    public Student(){}
+    public Student() {
+    }
 
     //テスト用コンストラクタ
     public Student(
-            String id, String fullName, String furigana, String nickName, String email,
-            String address, int age, String gender,String remark,boolean isDeleted) {
+            String id,
+            String fullName,
+            String furigana,
+            String nickName,
+            String email,
+            String address,
+            int age,
+            String gender,
+            String remark,
+            boolean isDeleted
+    ) {
 
         this.id = id;
         this.fullName = fullName;

@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+
 import java.sql.Date;
 
 @Schema(description = "受講生コース情報")
@@ -19,11 +20,16 @@ public class StudentCourse {
     private Date endOfCourse;
 
     //デフォルトコンストラクタ
-    public StudentCourse(){}
+    public StudentCourse() {
+    }
 
     //テスト用コンストラクタ
     public StudentCourse(
-            String courseId, String studentId, String courseName, Date startOfCourse, Date endOfCourse) {
+            String courseId,
+            String studentId,
+            String courseName,
+            Date startOfCourse,
+            Date endOfCourse) {
 
         this.courseId = courseId;
         this.studentId = studentId;
