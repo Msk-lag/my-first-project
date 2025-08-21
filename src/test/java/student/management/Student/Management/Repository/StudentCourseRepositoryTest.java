@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import student.management.Student.Management.data.Student;
 import student.management.Student.Management.data.StudentCourse;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
@@ -20,7 +21,7 @@ class StudentCourseRepositoryTest {
     private StudentCourseRepository sut;
 
     @Test
-    void 受講生コース情報の全件検索が行える(){
+    void 受講生コース情報の全件検索が行える() {
         List<StudentCourse> actual = sut.searchStudentCourseList();
         assertThat(actual.size()).isEqualTo(7);
     }
@@ -32,32 +33,34 @@ class StudentCourseRepositoryTest {
         assertThat(studentCourse.size()).isEqualTo(1);
         StudentCourse actual = studentCourse.get(0);
 
-        assertThat(actual.getCourseId()).isEqualTo("83bb2827-c655-49f8-b095-04efbf055ca2");
-        assertThat(actual.getCourseName()).isEqualTo("WordPress副業コース");
-        assertThat(actual.getStartOfCourse()).isEqualTo("2025-08-12");
-        assertThat(actual.getEndOfCourse()).isEqualTo("2026-08-12");
+        StudentCourse expected = new StudentCourse(
+                "83bb2827-c655-49f8-b095-04efbf055ca2",
+                "0b0b0109-5f2a-4454-bc1b-5d1ccadcf80b",
+                "WordPress副業コース",
+                java.sql.Date.valueOf("2025-08-12"),
+                java.sql.Date.valueOf("2026-08-12")
+        );
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
-    void 受講生コース情報の登録が行えること(){
-        StudentCourse studentCourse = new StudentCourse();
-
-        studentCourse.setCourseId(UUID.randomUUID().toString());
-        studentCourse.setStudentId("0b0b0109-5f2a-4454-bc1b-5d1ccadcf80b");
-        studentCourse.setCourseName("デザインコース");
-        studentCourse.setStartOfCourse(java.sql.Date.valueOf(LocalDate.now()));
-        studentCourse.setEndOfCourse(java.sql.Date.valueOf(LocalDate.now().plusYears(1)));
+    void 受講生コース情報の登録が行えること() {
+        StudentCourse studentCourse = new StudentCourse(
+                UUID.randomUUID().toString(),
+                "0b0b0109-5f2a-4454-bc1b-5d1ccadcf80b",
+                "デザインコース",
+                java.sql.Date.valueOf(LocalDate.now()),
+                java.sql.Date.valueOf(LocalDate.now().plusYears(1)));
 
         sut.registerStudentCourse(studentCourse);
 
         List<StudentCourse> actual = sut.searchStudentCourseList();
 
         assertThat(actual.size()).isEqualTo(8);
-
     }
 
     @Test
-    void 受講生コース情報のコース名が変更できること(){
+    void 受講生コース情報のコース名が変更できること() {
         List<StudentCourse> studentCourses = sut.searchStudentCourse("0b0b0109-5f2a-4454-bc1b-5d1ccadcf80b");
         StudentCourse studentCourse = studentCourses.get(0);
         studentCourse.setCourseName("デザインコース");

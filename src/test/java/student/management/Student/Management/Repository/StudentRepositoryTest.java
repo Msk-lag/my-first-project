@@ -27,66 +27,67 @@ class StudentRepositoryTest {
 
     @Test
     void 受講生の単一検索が行える(){
-        Student actual =  sut.searchStudent("0b0b0109-5f2a-4454-bc1b-5d1ccadcf80b");
-        assertThat(actual.getFullName()).isEqualTo("青木 康介");
-        assertThat(actual.getFurigana()).isEqualTo("せいき こすけ");
-        assertThat(actual.getNickName()).isEqualTo("ケンクン");
-        assertThat(actual.getEmail()).isEqualTo("aoki.kenta@example.com");
-        assertThat(actual.getAddress()).isEqualTo("神奈川県横浜市青葉区7-7-7");
-        assertThat(actual.getAge()).isEqualTo(19);
-        assertThat(actual.getGender()).isEqualTo("男性");
+        Student expected = new Student(
+                "0b0b0109-5f2a-4454-bc1b-5d1ccadcf80b",
+                "青木 康介",
+                "せいき こすけ",
+                "ケンクン",
+                "aoki.kenta@example.com",
+                "神奈川県横浜市青葉区7-7-7",
+                19,
+                "男性",
+                null,
+                false
+        );
+        Student actual = sut.searchStudent("0b0b0109-5f2a-4454-bc1b-5d1ccadcf80b");
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
     void 受講生の登録が行えること(){
-        Student student = new Student();
-
-        student.setId(UUID.randomUUID().toString());
-        student.setFullName("菊池 正樹");
-        student.setFurigana("キクチ マサキ");
-        student.setNickName("マサキ");
-        student.setEmail("test@example.com");
-        student.setAddress("岩手県");
-        student.setAge(26);
-        student.setGender("男性");
-        student.setRemark("");
-        student.setDeleted(false);
-
+        Student student = new Student(
+                UUID.randomUUID().toString(),
+                "菊池 正樹",
+                "キクチ マサキ",
+                "マサキ",
+                "test@example.com",
+                "岩手県",
+                26,
+                "男性",
+                "",
+              false
+        );
         sut.registerStudent(student);
 
         List<Student> actual = sut.search();
 
         assertThat(actual.size()).isEqualTo(8);
-
     }
 
     @Test
     void 受講生更新が行えること(){
         Student student =  sut.searchStudent("0b0b0109-5f2a-4454-bc1b-5d1ccadcf80b");
-        student.setFullName("菊池 正樹");
-        student.setFurigana("キクチ マサキ");
-        student.setNickName("マサキ");
-        student.setEmail("test@example.com");
-        student.setAddress("岩手県");
-        student.setAge(26);
-        student.setGender("男性");
-        student.setRemark("");
+        Student updatedStudent = new Student(
+                student.getId(),
+                "菊池 正樹",
+                "キクチ マサキ",
+                "マサキ",
+                "test@example.com",
+                "岩手県",
+                26,
+                "男性",
+                "",
+                false
+        );
+        sut.updateStudent(updatedStudent);
 
-        sut.updateStudent(student);
+        Student actual = sut.searchStudent(student.getId());
 
-        Student actual =  sut.searchStudent("0b0b0109-5f2a-4454-bc1b-5d1ccadcf80b");
-        assertThat(actual.getFullName()).isEqualTo("菊池 正樹");
-        assertThat(actual.getFurigana()).isEqualTo("キクチ マサキ");
-        assertThat(actual.getNickName()).isEqualTo("マサキ");
-        assertThat(actual.getEmail()).isEqualTo("test@example.com");
-        assertThat(actual.getAddress()).isEqualTo("岩手県");
-        assertThat(actual.getAge()).isEqualTo(26);
-        assertThat(actual.getGender()).isEqualTo("男性");
-        assertThat(actual.getRemark()).isEqualTo("");
+        assertThat(actual).isEqualTo(updatedStudent);
     }
 
     @Test
-    void 受講生の単一検索時無効なIDが渡されたとき何も返さないが行える() {
+    void 受講生の単一検索時無効なIDが渡されたとき何も返さない() {
         Student actual = sut.searchStudent("dummy");
         assertThat(actual).isNull();
     }
