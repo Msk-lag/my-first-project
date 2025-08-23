@@ -13,12 +13,14 @@ import student.management.Student.Management.domain.StudentDetail;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * 受講情報を取り扱うサービスです。
- * 受講生の検索や登・更新処理を行います。
+ * 受講生の検索や登録・更新処理を行います。
  */
 
 @Service
@@ -41,7 +43,6 @@ public class StudentService {
      *
      * @return 受講生詳細一覧(全件)
      */
-
     public List<StudentDetail> searchStudentList() {
         List<Student> studentList = repository.search();
         List<StudentCourse> studentCourseList = courseRepository.searchStudentCourseList();
@@ -60,7 +61,6 @@ public class StudentService {
      * @param studentDetail 受講生詳細
      * @return 登録情報を付与した受講生詳細
      */
-
     @Transactional
     public StudentDetail registerStudent(StudentDetail studentDetail) {
         Student student = studentDetail.getStudent();
@@ -75,18 +75,16 @@ public class StudentService {
             initStudentsCourse(course, studentId, now);
             courseRepository.registerStudentCourse(course);
         });
-
         return studentDetail;
-
     }
 
     /**
      * 受講生コース情報を登録する際の初期情報
-     * @param course　受講生コース情報
-     * @param studentId　受講生ID
-     * @param now　日付
+     *
+     * @param course    　受講生コース情報
+     * @param studentId 　受講生ID
+     * @param now       　日付
      */
-
     private static void initStudentsCourse(StudentCourse course, String studentId, LocalDate now) {
         course.setCourseId(UUID.randomUUID().toString());
         course.setStudentId(studentId);
@@ -101,7 +99,6 @@ public class StudentService {
      * @param id 　受講生ID
      * @return　受講生詳細
      */
-
     public StudentDetail searchStudent(String id) {
         Student student = repository.searchStudent(id);
         List<StudentCourse> courses = courseRepository.searchStudentCourse(id);
@@ -111,7 +108,8 @@ public class StudentService {
     /**
      * 受講生詳細の更新を行います。
      * 受講生の情報を受講生コース情報をそれぞれ更新します。
-     * @param studentDetail　受講生詳細
+     *
+     * @param studentDetail 　受講生詳細
      */
     @Transactional
     public void updateStudent(StudentDetail studentDetail) {
@@ -120,7 +118,18 @@ public class StudentService {
         for (StudentCourse course : studentDetail.getStudentCourseList()) {
             courseRepository.updateStudentCourse(course);
         }
+    }
 
-
+    /**
+     * 受講生条件検索
+     * 名前、年齢、性別、受講しているコース名に合致する受講生の情報を取得して設定します。
+     */
+    public List<StudentDetail> searchStudents(String fullName, Integer age, String gender) {
+        List<Student> students = repository.searchStudents(fullName, age, gender);
+        List<String> studentIds = students.stream()
+                .map(Student::getId)
+                .toList();
+        List<StudentCourse> courses = courseRepository.getCoursesByStudents(studentIds);
+        return converter.convertStudentDetails(students, courses);
     }
 }

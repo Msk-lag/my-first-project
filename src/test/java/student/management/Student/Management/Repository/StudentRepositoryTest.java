@@ -12,7 +12,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-
 @MybatisTest
 class StudentRepositoryTest {
 
@@ -20,16 +19,16 @@ class StudentRepositoryTest {
     private StudentRepository sut;
 
     @Test
-    void 受講生の全件検索が行える(){
+    void 受講生の全件検索が行える() {
         List<Student> actual = sut.search();
         assertThat(actual.size()).isEqualTo(7);
     }
 
     @Test
-    void 受講生の単一検索が行える(){
+    void 受講生の単一検索が行える() {
         Student expected = new Student(
                 "0b0b0109-5f2a-4454-bc1b-5d1ccadcf80b",
-                "青木 康介",
+                "青木康介 ",
                 "せいき こすけ",
                 "ケンクン",
                 "aoki.kenta@example.com",
@@ -44,7 +43,36 @@ class StudentRepositoryTest {
     }
 
     @Test
-    void 受講生の登録が行えること(){
+    void 受講生の条件検索時何も入力されなかったらリストを返す() {
+        List<Student> actual = sut.searchStudents("", null, "");
+        assertThat(actual.size()).isEqualTo(7);
+    }
+
+    @Test
+    void 受講生の条件検索が行える() {
+        Student expected = new Student("0b0b0109-5f2a-4454-bc1b-5d1ccadcf80b",
+                "青木 康介",
+                "せいき こすけ",
+                "ケンクン",
+                "aoki.kenta@example.com",
+                "神奈川県横浜市青葉区7-7-7",
+                19,
+                "男性",
+                null,
+                false
+        );
+        List<Student> actual = sut.searchStudents("青木 康介", 19, "男性");
+        assertThat(actual).isEqualTo(List.of(expected));
+    }
+
+    @Test
+    void 受講生の条件検索でDBにない情報が入力されたとき空のリストを返す() {
+        List<Student> actual = sut.searchStudents("無効な名前", 999, "無効な性別");
+        assertThat(actual).isEmpty();
+    }
+
+    @Test
+    void 受講生の登録が行えること() {
         Student student = new Student(
                 UUID.randomUUID().toString(),
                 "菊池 正樹",
@@ -55,7 +83,7 @@ class StudentRepositoryTest {
                 26,
                 "男性",
                 "",
-              false
+                false
         );
         sut.registerStudent(student);
 
@@ -65,8 +93,8 @@ class StudentRepositoryTest {
     }
 
     @Test
-    void 受講生更新が行えること(){
-        Student student =  sut.searchStudent("0b0b0109-5f2a-4454-bc1b-5d1ccadcf80b");
+    void 受講生更新が行えること() {
+        Student student = sut.searchStudent("0b0b0109-5f2a-4454-bc1b-5d1ccadcf80b");
         Student updatedStudent = new Student(
                 student.getId(),
                 "菊池 正樹",

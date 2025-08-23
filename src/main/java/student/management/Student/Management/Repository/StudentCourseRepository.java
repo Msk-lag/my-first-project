@@ -26,7 +26,7 @@ public interface StudentCourseRepository {
      * 受講生IDに紐づく受講生コース情報を検索します
      *
      * @param studentId 　受講生ID
-     * 受講生IDに紐づく受講生コース情報
+     *                  受講生IDに紐づく受講生コース情報
      */
     List<StudentCourse> searchStudentCourse(String studentId);
 
@@ -43,6 +43,13 @@ public interface StudentCourseRepository {
      * @param studentCourse 　受講生コース情報
      */
     void updateStudentCourse(StudentCourse studentCourse);
+
+    /**
+     * 受講生IDに紐づく受講生コース情報をLISTで一括検索します
+     * N+1問題対策のためリストで一括取得するものを作成
+     * 既存のコードに影響を与えないため新規作成
+     */
+    List<StudentCourse> getCoursesByStudents(List<String> studentIds);
 
 
 }

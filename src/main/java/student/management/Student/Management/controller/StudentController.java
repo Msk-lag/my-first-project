@@ -27,7 +27,6 @@ public class StudentController {
     private StudentService service;
 
 
-
     @Autowired
     public StudentController(StudentService service) {
         this.service = service;
@@ -40,28 +39,54 @@ public class StudentController {
      *
      * @return 受講生一覧(全件)
      */
-    @Operation(summary = "一覧検索" ,description = "受講生一覧を検索します。")
+    @Operation(summary = "一覧検索", description = "受講生一覧を検索します。")
     @GetMapping("/studentList")
-    public List<StudentDetail> getStudentList(){
+    public List<StudentDetail> getStudentList() {
         return service.searchStudentList();
     }
+
 
     /**
      * 受講生コースを検索します
      *
      * @return 受講生コース一覧
      */
-    @Operation(summary = "受講生コース検索" ,description = "受講生コースを検索します。")
+    @Operation(summary = "受講生コース検索", description = "受講生コースを検索します。")
     @GetMapping("/studentCourseList")
     public List<StudentCourse> getStudentCourseList() {
         return service.searchStudentCourseList();
     }
 
+    /**
+     * 受講生詳細検索です。
+     * IDに紐づく任意の受講生の情報を取得します。
+     *
+     * @param id 受講生ID
+     * @return 受講生情報
+     */
+    @Operation(summary = "受講生詳細検索", description = "IDに紐づく任意の受講生の情報を取得します。")
+    @GetMapping("/student/{id}")
+    public StudentDetail getStudent(@PathVariable UUID id) {
+        return service.searchStudent(id.toString());
+    }
 
     /**
-     *受講生詳細の登録を行います。
+     * 受講生条件検索
+     * 名前、年齢、性別、受講しているコース名に合致する受講生の情報を取得します。
+     */
+    @Operation(summary = "受講生条件検索", description = "名前、年齢、性別に合致する受講生の情報を取得します。")
+    @GetMapping("/students")
+    public List<StudentDetail> getStudents(
+            @RequestParam(required = false) String fullName,
+            @RequestParam(required = false) Integer age,
+            @RequestParam(required = false) String gender) {
+        return service.searchStudents(fullName, age, gender);
+    }
+
+    /**
+     * 受講生詳細の登録を行います。
      *
-     * @param studentDetail　受講生詳細
+     * @param studentDetail 　受講生詳細
      * @return 実行結果
      */
     @Operation(summary = "受講生登録", description = "受講生を登録します。")
@@ -72,26 +97,11 @@ public class StudentController {
         return ResponseEntity.ok(responseStudentDetail);
     }
 
-
-    /**
-     * 受講生詳細検索です。
-     * IDに紐づく任意の受講生の情報を取得します。
-     *
-     * @param id 受講生ID
-     * @return 受講生情報
-     */
-    @Operation(summary = "受講生詳細検索" ,description = "IDに紐づく任意の受講生の情報を取得します。")
-    @GetMapping("/student/{id}")
-    public StudentDetail showUpdateStudent(@PathVariable  UUID id) {
-        return service.searchStudent(id.toString());
-
-
-    }
-
     /**
      * 受講生詳細の更新を行います。
      * キャンセルフラグの更新もここで行います（論理削除）
-     * @param studentDetail　受講生詳細
+     *
+     * @param studentDetail 　受講生詳細
      * @return 実行結果
      */
     @Operation(summary = "受講生更新", description = "受講生詳細の更新を行います。")

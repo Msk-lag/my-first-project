@@ -79,4 +79,35 @@ class StudentCourseRepositoryTest {
         assertThat(actual).isEmpty();
     }
 
+    @Test
+    void 受講生IDに紐づく受講生コース情報リストで取得する() {
+        List<StudentCourse> actual = sut.getCoursesByStudents
+                (List.of("0b0b0109-5f2a-4454-bc1b-5d1ccadcf80b", "550e8400-e29b-41d4-a716-446655440000"));
+        assertThat(actual.size()).isEqualTo(2);
+
+        List<StudentCourse> expected = List.of(
+                new StudentCourse(
+                        "83bb2827-c655-49f8-b095-04efbf055ca2",
+                        "0b0b0109-5f2a-4454-bc1b-5d1ccadcf80b",
+                        "WordPress副業コース",
+                        java.sql.Date.valueOf("2025-08-12"),
+                        java.sql.Date.valueOf("2026-08-12")
+                ),
+                new StudentCourse(
+                        "9f8c9c41-2a1b-4d62-9d25-111111111111",
+                        "550e8400-e29b-41d4-a716-446655440000",
+                        "Javaコース",
+                        java.sql.Date.valueOf("2025-07-01"),
+                        java.sql.Date.valueOf("2025-09-30")
+                )
+        );
+        assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
+    }
+
+
+    @Test
+    void 受講生IDに紐づく受講生コース情報リストで一括で取得する際に無効なIDが渡されたとき空のリストを返す() {
+        List<StudentCourse> actual = sut.getCoursesByStudents(List.of("dummy"));
+        assertThat(actual).isEmpty();
+    }
 }
