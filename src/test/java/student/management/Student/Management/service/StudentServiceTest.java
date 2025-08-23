@@ -37,27 +37,27 @@ class StudentServiceTest {
     private StudentService sut;
 
     @BeforeEach
-    void before(){
-        sut  = new StudentService(repository,courseRepository,converter);
+    void before() {
+        sut = new StudentService(repository, courseRepository, converter);
     }
 
     @Test
     void 受講生詳細の一覧検索_リポジトリとコンバーターの処理を適切に呼び出せていること() {
-        List<Student>studentList = new ArrayList<>();
-        List<StudentCourse>studentCourseList = new ArrayList<>();
+        List<Student> studentList = new ArrayList<>();
+        List<StudentCourse> studentCourseList = new ArrayList<>();
 
-       when(repository.search()).thenReturn(studentList);
-       when(courseRepository.searchStudentCourseList()).thenReturn(studentCourseList);
+        when(repository.search()).thenReturn(studentList);
+        when(courseRepository.searchStudentCourseList()).thenReturn(studentCourseList);
 
         sut.searchStudentList();
 
         verify(repository, times(1)).search();
         verify(courseRepository, times(1)).searchStudentCourseList();
-        verify(converter, times(1)).convertStudentDetails(studentList,studentCourseList);
+        verify(converter, times(1)).convertStudentDetails(studentList, studentCourseList);
     }
 
     @Test
-    void 受講生詳細検索_リポジトリが適切に呼び出されているのか(){
+    void 受講生詳細検索_リポジトリが適切に呼び出されているのか() {
         Student student = new Student();
         List<StudentCourse> courses = new ArrayList<>();
         String id = "dummy";
@@ -72,7 +72,35 @@ class StudentServiceTest {
     }
 
     @Test
-    void 受講生登録_リポジトリ適切に呼び出されているのか生成されたUUIDの形式が正しいものか(){
+    void 受講生条件検索時_リポジトリとコンバーターの処理を適切に呼び出せていること() {
+        List<Student> students = new ArrayList<>();
+        Student student = new Student();
+        student.setId("dummy");
+        students.add(student);
+
+        List<StudentCourse> courses = new ArrayList<>();
+
+        when(repository.searchStudents(any(), any(), any()))
+                .thenReturn(students);
+        when(courseRepository.getCoursesByStudents(List.of("dummy")))
+                .thenReturn(courses);
+
+        sut.searchStudents("", null, "");
+
+        verify(repository, times(1)).searchStudents(any(), any(), any());
+        verify(courseRepository, times(1)).getCoursesByStudents(List.of("dummy"));
+        verify(converter, times(1)).convertStudentDetails(students, courses);
+    }
+
+    @Test
+    void 受講生条件検索時一括でコース情報を取得しているか() {
+        List<String> studentId = List.of("id1", "id2");
+        courseRepository.getCoursesByStudents(List.of("id1", "id2"));
+        verify(courseRepository, times(1)).getCoursesByStudents(studentId);
+    }
+
+    @Test
+    void 受講生登録_リポジトリ適切に呼び出されているのか生成されたUUIDの形式が正しいものか() {
         Student student = new Student();
         StudentCourse studentCourse = new StudentCourse();
         StudentDetail studentDetail = new StudentDetail();
@@ -87,11 +115,10 @@ class StudentServiceTest {
 
         String id = studentDetail.getStudent().getId();
         assertDoesNotThrow(() -> UUID.fromString(id));
-
     }
 
     @Test
-    void  受講生詳細の更新_リポジトリが適切に呼び出されているのか(){
+    void 受講生詳細の更新_リポジトリが適切に呼び出されているのか() {
         Student student = new Student();
         StudentCourse studentCourse = new StudentCourse();
         StudentDetail studentDetail = new StudentDetail();
@@ -104,5 +131,4 @@ class StudentServiceTest {
         verify(repository, times(1)).updateStudent(student);
         verify(courseRepository, times(1)).updateStudentCourse(studentCourse);
     }
-
 }

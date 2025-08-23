@@ -5,13 +5,23 @@
 <mapper namespace="student.management.Student.Management.Repository.StudentCourseRepository">
 
     <!--受講生のコース情報の全件検索 -->
-    <select id="searchStudentCourseList"  resultType="student.management.Student.Management.data.StudentCourse">
+    <select id="searchStudentCourseList" resultType="student.management.Student.Management.data.StudentCourse">
         SELECT * FROM students_course
     </select>
 
     <!--受講生IDに紐づく受講生コース情報を検索 -->
-    <select id="searchStudentCourse"  resultType="student.management.Student.Management.data.StudentCourse">
-        SELECT * FROM students_course WHERE student_id = #{studentId}
+    <select id="searchStudentCourse" resultType="student.management.Student.Management.data.StudentCourse">
+        SELECT * FROM students_course
+        WHERE student_id = #{studentId}
+    </select>
+
+    <!--受講生IDに紐づく受講生コース情報を検索#N+1問題対策の一括取得　受講生条件検索時に使用 -->
+    <select id="getCoursesByStudents" resultType="student.management.Student.Management.data.StudentCourse">
+        SELECT * FROM students_course
+        WHERE student_id IN
+        <foreach item="id" collection="studentIds" open="(" separator="," close=")">
+            #{id}
+        </foreach>
     </select>
 
     <!--受講生コース情報を新規登録 -->
@@ -34,14 +44,9 @@
 
     <!--受講生コースのコース名を更新 -->
     <update id="updateStudentCourse">
-        UPDATE  students_course SET
+        UPDATE students_course SET
         course_name = #{courseName}
         WHERE student_id = #{studentId} AND course_id = #{courseId}
-
     </update>
-
-
-
-
 
 </mapper>

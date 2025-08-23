@@ -22,6 +22,7 @@ import student.management.Student.Management.domain.StudentDetail;
 import student.management.Student.Management.exceptionHandler.TestException;
 import student.management.Student.Management.service.StudentService;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -78,8 +79,22 @@ class StudentControllerTest {
     }
 
     @Test
-    void 受講生詳細検索時にUUID以外の入力されたときにサービスの呼び出しが行われないこと() throws  Exception{
-        mockMvc.perform(get("/student/{id}","dummy"))
+    void 受講生条件検索の検索が実行できて空のリストが返ってくること() throws Exception {
+        when(service.searchStudents(any(), any(), any()))
+                .thenReturn(Collections.emptyList());
+
+        mockMvc.perform(get("/students")
+                        .param("fullName", "")
+                        .param("age", "")
+                        .param("gender", ""))
+                .andExpect(status().isOk());
+
+        verify(service, times(1)).searchStudents(any(), any(), any());
+    }
+
+    @Test
+    void 受講生詳細検索時にUUID以外の入力されたときにサービスの呼び出しが行われないこと() throws Exception {
+        mockMvc.perform(get("/student/{id}", "dummy"))
                 .andExpect(status().isBadRequest());
 
         verify(service, times(0)).searchStudent(anyString());

@@ -5,13 +5,29 @@
 <mapper namespace="student.management.Student.Management.Repository.StudentRepository">
 
     <!--受講生の全件検索 -->
-    <select id="search"  resultType="student.management.Student.Management.data.Student">
+    <select id="search" resultType="student.management.Student.Management.data.Student">
         SELECT * FROM students
     </select>
 
     <!--受講生の検索 -->
-    <select id="searchStudent"  resultType="student.management.Student.Management.data.Student">
+    <select id="searchStudent" resultType="student.management.Student.Management.data.Student">
         SELECT * FROM students WHERE id = #{id}
+    </select>
+
+    <!--受講生の条件検索 -->
+    <select id="searchStudents" resultType="student.management.Student.Management.data.Student">
+        SELECT * FROM students
+        <where>
+            <if test="fullName != null and fullName != ''">
+                fullName LIKE CONCAT('%', #{fullName}, '%')
+            </if>
+            <if test="age != null">
+                AND age = #{age}
+            </if>
+            <if test="gender != null and gender != ''">
+                AND gender = #{gender}
+            </if>
+        </where>
     </select>
 
     <!--受講生情報を新規登録 -->
@@ -47,7 +63,7 @@
 
     <!--受講生を更新 -->
     <update id="updateStudent">
-        UPDATE  students SET
+        UPDATE students SET
         fullName = #{fullName},
         furigana = #{furigana},
         nick_name = #{nickName},
@@ -60,9 +76,6 @@
         WHERE id = #{id}
 
     </update>
-
-
-
 
 
 </mapper>
