@@ -168,5 +168,4 @@ class StudentControllerTest {
 
         assertThat(violations.size()).isEqualTo(0);
     }
-
 }
