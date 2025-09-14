@@ -4,19 +4,20 @@ package student.management.Student.Management.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import student.management.Student.Management.Repository.StudentCourseApplicationRepository;
 import student.management.Student.Management.Repository.StudentCourseRepository;
 import student.management.Student.Management.Repository.StudentRepository;
 import student.management.Student.Management.controller.converter.StudentConverter;
+import student.management.Student.Management.data.ApplicationStatus;
 import student.management.Student.Management.data.Student;
 import student.management.Student.Management.data.StudentCourse;
+import student.management.Student.Management.data.StudentCourseApplication;
 import student.management.Student.Management.domain.StudentDetail;
 
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 /**
  * 受講情報を取り扱うサービスです。
@@ -28,12 +29,18 @@ public class StudentService {
 
     private StudentRepository repository;
     private StudentCourseRepository courseRepository;
+    private StudentCourseApplicationRepository applicationRepository;
     private StudentConverter converter;
 
     @Autowired
-    public StudentService(StudentRepository repository, StudentCourseRepository courseRepository, StudentConverter converter) {
+    public StudentService(StudentRepository repository,
+                          StudentCourseRepository courseRepository,
+                          StudentCourseApplicationRepository applicationRepository,
+                          StudentConverter converter
+    ) {
         this.repository = repository;
         this.courseRepository = courseRepository;
+        this.applicationRepository = applicationRepository;
         this.converter = converter;
     }
 
@@ -46,7 +53,8 @@ public class StudentService {
     public List<StudentDetail> searchStudentList() {
         List<Student> studentList = repository.search();
         List<StudentCourse> studentCourseList = courseRepository.searchStudentCourseList();
-        return converter.convertStudentDetails(studentList, studentCourseList);
+        List<StudentCourseApplication> studentCourseApplicationList = applicationRepository.searchStudentCourseApplicationList();
+        return converter.convertStudentDetails(studentList, studentCourseList, studentCourseApplicationList);
 
     }
 
@@ -56,7 +64,9 @@ public class StudentService {
 
     /**
      * 受講生詳細の登録を行います。
-     * 受講生と受講生コース情報を個別に登録し、受講生コース情報には受講生情報を紐づける値やコース開始日、コース終了日を設定します。
+     * 受講生,受講生コース情報,申し込み情報を個別に登録
+     * 受講生コース情報には受講生情報を紐づける値やコース開始日、コース終了日を設定します。
+     * 申し込み情報には受講生情報、コース情報を紐づける値を設定します
      *
      * @param studentDetail 受講生詳細
      * @return 登録情報を付与した受講生詳細
@@ -74,7 +84,15 @@ public class StudentService {
         studentDetail.getStudentCourseList().forEach(course -> {
             initStudentsCourse(course, studentId, now);
             courseRepository.registerStudentCourse(course);
+
+            studentDetail.getStudentCourseApplicationsList().stream()
+                    .filter(app -> course.getCourseId().equals(app.getCourseId()))
+                    .forEach(app -> {
+                        initStudentsCourseApplication(app, course.getCourseId(), studentId);
+                        applicationRepository.registerCourseApplication(app);
+                    });
         });
+
         return studentDetail;
     }
 
@@ -93,8 +111,26 @@ public class StudentService {
     }
 
     /**
+     * 受講生コース申し込み情報情報を登録する際の初期情報
+     *
+     * @param application 申し込み情報
+     * @param studentId   　受講生ID
+     * @param courseId    コースID
+     *                    CourseStatus には初期情報として仮登録(Provisional)を設定する
+     */
+    private static void initStudentsCourseApplication(
+            StudentCourseApplication application, String courseId, String studentId) {
+
+        application.setApplicationId(UUID.randomUUID().toString());
+        application.setStudentId(studentId);
+        application.setCourseId(courseId);
+        application.setCourseStatus(ApplicationStatus.Provisional);
+    }
+
+
+    /**
      * 受講生詳細検索です。
-     * IDに紐づく受講生情報を取得した後、その受講生に紐づく受講生コース情報を取得して設定します。
+     * IDに紐づく受講生情報を取得した後、その受講生に紐づく受講生コース情報、申し込み情報を取得して設定します。
      *
      * @param id 　受講生ID
      * @return　受講生詳細
@@ -102,12 +138,13 @@ public class StudentService {
     public StudentDetail searchStudent(String id) {
         Student student = repository.searchStudent(id);
         List<StudentCourse> courses = courseRepository.searchStudentCourse(id);
-        return new StudentDetail(student, courses);
+        List<StudentCourseApplication> courseStatus = applicationRepository.searchStudentsCourseApplication(List.of(id));
+        return new StudentDetail(student, courses, courseStatus);
     }
 
     /**
      * 受講生詳細の更新を行います。
-     * 受講生の情報を受講生コース情報をそれぞれ更新します。
+     * 受講生の情報、受講生コース情報、申し込み情報をそれぞれ更新します。
      *
      * @param studentDetail 　受講生詳細
      */
@@ -117,6 +154,9 @@ public class StudentService {
         repository.updateStudent(student);
         for (StudentCourse course : studentDetail.getStudentCourseList()) {
             courseRepository.updateStudentCourse(course);
+        }
+        for (StudentCourseApplication applicationStatus : studentDetail.getStudentCourseApplicationsList()) {
+            applicationRepository.courseStatusUpdate(applicationStatus);
         }
     }
 
@@ -130,6 +170,7 @@ public class StudentService {
                 .map(Student::getId)
                 .toList();
         List<StudentCourse> courses = courseRepository.getCoursesByStudents(studentIds);
-        return converter.convertStudentDetails(students, courses);
+        List<StudentCourseApplication> courseStatus = applicationRepository.searchStudentsCourseApplication(studentIds);
+        return converter.convertStudentDetails(students, courses, courseStatus);
     }
 }

@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import student.management.Student.Management.data.Student;
 import student.management.Student.Management.data.StudentCourse;
+import student.management.Student.Management.data.StudentCourseApplication;
 
 import java.util.List;
 
@@ -24,5 +25,8 @@ public class StudentDetail {
 
     @Valid
     private List<StudentCourse> studentCourseList;
+
+    @Valid
+    private List<StudentCourseApplication> studentCourseApplicationsList;
 
 }

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="student.management.Student.Management.Repository.StudentCourseApplicationRepository">
+
+    <!--コース申し込み状況を全件取得-->
+    <select id="searchStudentCourseApplicationList"
+            resultType="student.management.Student.Management.data.StudentCourseApplication">
+        SELECT * FROM student_course_application
+    </select>
+
+    <!--受講生IDに紐づくコース申し込み状況を取得-->
+    <select id="searchStudentCourseApplication"
+            resultType="student.management.Student.Management.data.StudentCourseApplication">
+        SELECT * FROM student_course_application
+        WHERE student_id IN
+        <foreach item="id" collection="studentId" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+    <!--コース申し込み情報を新規登録 -->
+    <insert id="registerCourseApplication">
+        INSERT INTO student_course_application (
+        application_id,
+        student_id,
+        course_id,
+        course_status
+        )
+        VALUES (
+        #{applicationId},
+        #{studentId},
+        #{courseId},
+        #{courseStatus}
+        )
+    </insert>
+
+    <!--コース申し込み状況のステータスを更新 -->
+    <update id="courseStatusUpdate">
+        UPDATE student_course_application
+        SET course_status = #{courseStatus}
+        WHERE student_id = #{studentId} AND course_id = #{courseId}
+    </update>
+
+</mapper>
