@@ -39,14 +39,16 @@ public class StudentConverter {
             List<StudentCourse> convertStudentCourseList = studentCourseList.stream()
                     .filter(studentCourse -> student.getId().equals(studentCourse.getStudentId()))
                     .collect(Collectors.toList());
-
             studentDetail.setStudentCourseList(convertStudentCourseList);
-            studentDetails.add(studentDetail);
 
             List<StudentCourseApplication> convertApplicationList = studentCourseApplicationList.stream()
-                    .filter(app -> student.getId().equals(app.getStudentId()))
+                    .filter(app -> app.getStudentId().equals(student.getId()) &&
+                            convertStudentCourseList.stream()
+                                    .anyMatch(course -> course.getCourseId().equals(app.getCourseId())))
                     .collect(Collectors.toList());
             studentDetail.setStudentCourseApplicationsList(convertApplicationList);
+
+            studentDetails.add(studentDetail);
         });
         return studentDetails;
     }

@@ -2,6 +2,7 @@ package student.management.Student.Management.data;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -32,9 +33,9 @@ public class StudentCourseApplication {
             regexp = "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
             message = "UUIDを使用してください")
     private String courseId;
-    
 
-    @NotBlank
+
+    @NotNull
     private ApplicationStatus courseStatus;
 
 

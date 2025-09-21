@@ -10,6 +10,7 @@ import student.management.Student.Management.Repository.StudentCourseApplication
 import student.management.Student.Management.Repository.StudentCourseRepository;
 import student.management.Student.Management.Repository.StudentRepository;
 import student.management.Student.Management.controller.converter.StudentConverter;
+import student.management.Student.Management.data.ApplicationStatus;
 import student.management.Student.Management.data.Student;
 import student.management.Student.Management.data.StudentCourse;
 import student.management.Student.Management.data.StudentCourseApplication;
@@ -79,6 +80,7 @@ class StudentServiceTest {
 
         verify(repository, times(1)).searchStudent(id);
         verify(courseRepository, times(1)).searchStudentCourse(id);
+        verify(applicationRepository, times(1)).searchStudentsCourseApplication(List.of(id));
     }
 
     @Test
@@ -121,12 +123,12 @@ class StudentServiceTest {
     void 受講生登録_リポジトリ適切に呼び出されているのか() {
         Student student = new Student();
         StudentCourse studentCourse = new StudentCourse();
-        StudentCourseApplication app = new StudentCourseApplication();
+        StudentCourseApplication courseApplication = new StudentCourseApplication();
         StudentDetail actual = new StudentDetail();
 
         actual.setStudent(student);
         actual.setStudentCourseList(List.of(studentCourse));
-        actual.setStudentCourseApplicationsList(List.of(app));
+        actual.setStudentCourseApplicationsList(List.of(courseApplication));
 
         sut.registerStudent(actual);
 
@@ -139,16 +141,20 @@ class StudentServiceTest {
     void 受講生詳細の更新_リポジトリが適切に呼び出されているのか() {
         Student student = new Student();
         StudentCourse studentCourse = new StudentCourse();
+        StudentCourseApplication courseApplication = new StudentCourseApplication();
         StudentDetail studentDetail = new StudentDetail();
 
         studentDetail.setStudent(student);
         studentDetail.setStudentCourseList(List.of(studentCourse));
+        studentDetail.setStudentCourseApplicationsList(List.of(courseApplication));
 
         sut.updateStudent(studentDetail);
 
         verify(repository, times(1)).updateStudent(student);
         verify(courseRepository, times(1)).updateStudentCourse(studentCourse);
+        verify(applicationRepository, times(1)).courseStatusUpdate(courseApplication);
     }
+
 }
 
 

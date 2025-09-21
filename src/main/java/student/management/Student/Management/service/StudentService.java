@@ -85,13 +85,13 @@ public class StudentService {
             initStudentsCourse(course, studentId, now);
             courseRepository.registerStudentCourse(course);
 
-            studentDetail.getStudentCourseApplicationsList().stream()
-                    .filter(app -> course.getCourseId().equals(app.getCourseId()))
-                    .forEach(app -> {
-                        initStudentsCourseApplication(app, course.getCourseId(), studentId);
-                        applicationRepository.registerCourseApplication(app);
-                    });
+            StudentCourseApplication courseApplication = new StudentCourseApplication();
+            initStudentsCourseApplication(courseApplication, course.getCourseId(), studentId);
+            applicationRepository.registerCourseApplication(courseApplication);
+            studentDetail.getStudentCourseApplicationsList().add(courseApplication);
+            
         });
+
 
         return studentDetail;
     }
@@ -104,6 +104,7 @@ public class StudentService {
      * @param now       　日付
      */
     private static void initStudentsCourse(StudentCourse course, String studentId, LocalDate now) {
+
         course.setCourseId(UUID.randomUUID().toString());
         course.setStudentId(studentId);
         course.setStartOfCourse(Date.valueOf(now));
