@@ -28,7 +28,7 @@ class StudentRepositoryTest {
     void 受講生の単一検索が行える() {
         Student expected = new Student(
                 "0b0b0109-5f2a-4454-bc1b-5d1ccadcf80b",
-                "青木康介 ",
+                "青木 康介",
                 "せいき こすけ",
                 "ケンクン",
                 "aoki.kenta@example.com",

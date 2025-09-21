@@ -21,3 +21,11 @@ CREATE TABLE IF NOT EXISTS students_course
     start_of_course DATE,
     end_of_course   DATE
 );
+
+CREATE TABLE IF NOT EXISTS student_course_application (
+    application_id VARCHAR(50) PRIMARY KEY,
+    student_id VARCHAR(50),
+    course_id VARCHAR(50),
+    course_status VARCHAR(20),
+    CHECK (course_status IN ('Provisional', 'Official', 'TakingCourse', 'EndCourse'))
+);

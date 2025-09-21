@@ -2,52 +2,57 @@ package student.management.Student.Management.data;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.sql.Date;
-
-@Schema(description = "受講生コース情報")
+@Schema(description = "受講生コース申し込み情報")
 @Getter
 @Setter
 @EqualsAndHashCode
-public class StudentCourse {
+public class StudentCourseApplication {
 
+    @NotBlank
     @Pattern(
             regexp = "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
             message = "UUIDを使用してください")
-    private String courseId;
-    
+    private String applicationId;
+
+
+    @NotBlank
     @Pattern(
             regexp = "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
             message = "UUIDを使用してください")
     private String studentId;
 
-    private String courseName;
 
-    private Date startOfCourse;
+    @NotBlank
+    @Pattern(
+            regexp = "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
+            message = "UUIDを使用してください")
+    private String courseId;
 
-    private Date endOfCourse;
+
+    @NotNull
+    private ApplicationStatus courseStatus;
+
 
     //デフォルトコンストラクタ
-    public StudentCourse() {
+    public StudentCourseApplication() {
     }
 
     //テスト用コンストラクタ
-    public StudentCourse(
-            String courseId,
+    public StudentCourseApplication(
+            String applicationId,
             String studentId,
-            String courseName,
-            Date startOfCourse,
-            Date endOfCourse) {
+            String courseId,
+            ApplicationStatus courseStatus) {
 
-        this.courseId = courseId;
+        this.applicationId = applicationId;
         this.studentId = studentId;
-        this.courseName = courseName;
-        this.startOfCourse = startOfCourse;
-        this.endOfCourse = endOfCourse;
+        this.courseId = courseId;
+        this.courseStatus = courseStatus;
     }
-
 }

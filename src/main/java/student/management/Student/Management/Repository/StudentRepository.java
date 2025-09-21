@@ -43,7 +43,7 @@ public interface StudentRepository {
     void updateStudent(Student student);
 
     /**
-     * 受講生の検索を行います
+     * 受講生の条件検索を行います
      *
      * @param fullName 名前
      * @param age      年齢

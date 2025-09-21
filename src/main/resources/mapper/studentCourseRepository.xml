@@ -44,8 +44,8 @@
 
     <!--受講生コースのコース名を更新 -->
     <update id="updateStudentCourse">
-        UPDATE students_course SET
-        course_name = #{courseName}
+        UPDATE students_course
+        SET course_name = #{courseName}
         WHERE student_id = #{studentId} AND course_id = #{courseId}
     </update>
 

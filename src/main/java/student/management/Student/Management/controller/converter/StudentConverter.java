@@ -3,6 +3,7 @@ package student.management.Student.Management.controller.converter;
 import org.springframework.stereotype.Component;
 import student.management.Student.Management.data.Student;
 import student.management.Student.Management.data.StudentCourse;
+import student.management.Student.Management.data.StudentCourseApplication;
 import student.management.Student.Management.domain.StudentDetail;
 
 import java.util.ArrayList;
@@ -19,13 +20,17 @@ public class StudentConverter {
     /**
      * 受講生に紐づくコース情報をマッピングする。
      * 受講生コース情報は受講生に対して複数存在するのでループを回して受講生詳細情報を組み立てる。
-     * @param studentList 受講生一覧
-     * @param studentCourseList 受講生コース情報のリスト
+     * 受講生コースに紐づく申し込み状況も一緒に組み立てる
+     *
+     * @param studentList                  受講生一覧
+     * @param studentCourseList            受講生コース情報のリスト
+     * @param studentCourseApplicationList コース申し込み状況
      * @return 受講生詳細情報のリスト
      */
 
     public List<StudentDetail> convertStudentDetails(List<Student> studentList,
-                                                      List<StudentCourse> studentCourseList) {
+                                                     List<StudentCourse> studentCourseList,
+                                                     List<StudentCourseApplication> studentCourseApplicationList) {
         List<StudentDetail> studentDetails = new ArrayList<>();
         studentList.forEach(student -> {
             StudentDetail studentDetail = new StudentDetail();
@@ -34,8 +39,15 @@ public class StudentConverter {
             List<StudentCourse> convertStudentCourseList = studentCourseList.stream()
                     .filter(studentCourse -> student.getId().equals(studentCourse.getStudentId()))
                     .collect(Collectors.toList());
-
             studentDetail.setStudentCourseList(convertStudentCourseList);
+
+            List<StudentCourseApplication> convertApplicationList = studentCourseApplicationList.stream()
+                    .filter(app -> app.getStudentId().equals(student.getId()) &&
+                            convertStudentCourseList.stream()
+                                    .anyMatch(course -> course.getCourseId().equals(app.getCourseId())))
+                    .collect(Collectors.toList());
+            studentDetail.setStudentCourseApplicationsList(convertApplicationList);
+
             studentDetails.add(studentDetail);
         });
         return studentDetails;
