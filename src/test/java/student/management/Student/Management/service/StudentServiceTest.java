@@ -128,7 +128,24 @@ class StudentServiceTest {
 
         actual.setStudent(student);
         actual.setStudentCourseList(List.of(studentCourse));
-        actual.setStudentCourseApplicationsList(List.of(courseApplication));
+        actual.setStudentCourseApplicationsList(new ArrayList<>(List.of(courseApplication)));
+
+        sut.registerStudent(actual);
+
+        verify(repository, times(1)).registerStudent(any(Student.class));
+        verify(courseRepository, times(1)).registerStudentCourse(any(StudentCourse.class));
+        verify(applicationRepository, times(1)).registerCourseApplication(any(StudentCourseApplication.class));
+    }
+
+    @Test
+    void 受講生登録時nullを入力してもリポジトリ適切に呼び出されているのか() {
+        Student student = new Student();
+        StudentCourse studentCourse = new StudentCourse();
+        StudentDetail actual = new StudentDetail();
+
+        actual.setStudent(student);
+        actual.setStudentCourseList(List.of(studentCourse));
+        actual.setStudentCourseApplicationsList(null);
 
         sut.registerStudent(actual);
 

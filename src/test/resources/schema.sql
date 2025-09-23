@@ -27,5 +27,5 @@ CREATE TABLE IF NOT EXISTS student_course_application (
     student_id VARCHAR(50),
     course_id VARCHAR(50),
     course_status VARCHAR(20),
-    CHECK (course_status IN ('Provisional', 'Official', 'TakingCourse', 'EndCourse'))
+    CHECK (course_status IN ('PROVISIONAL', 'OFFICIAL', 'TAKING_COURSE', 'END_COURSE'))
 );

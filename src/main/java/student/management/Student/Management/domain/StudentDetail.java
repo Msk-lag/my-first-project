@@ -10,6 +10,7 @@ import student.management.Student.Management.data.Student;
 import student.management.Student.Management.data.StudentCourse;
 import student.management.Student.Management.data.StudentCourseApplication;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Schema(description = "受講生詳細")
@@ -18,7 +19,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StudentDetail {
-
 
     @Valid
     private Student student;
@@ -29,4 +29,10 @@ public class StudentDetail {
     @Valid
     private List<StudentCourseApplication> studentCourseApplicationsList;
 
+    public List<StudentCourseApplication> getStudentCourseApplicationsList() {
+        if (studentCourseApplicationsList == null) {
+            studentCourseApplicationsList = new ArrayList<>();
+        }
+        return studentCourseApplicationsList;
+    }
 }
