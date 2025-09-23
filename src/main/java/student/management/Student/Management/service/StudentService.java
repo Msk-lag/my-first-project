@@ -180,6 +180,10 @@ public class StudentService {
         return converter.convertStudentDetails(students, courses, courseStatus);
     }
 
+    /**
+     * studentIds が null または空リスト場合空のリストを返す
+     * studentIds に値がある場合のみ、リポジトリに渡す
+     */
     public List<StudentCourseApplication> searchStudentsCourseApplicationNullCheck(List<String> studentIds) {
         if (studentIds == null || studentIds.isEmpty()) {
             return Collections.emptyList();

@@ -37,9 +37,9 @@
     </insert>
 
     <!--コース申し込み状況のステータスを更新 -->
-    <update id="courseStatusUpdate">
+    <update id="courseStatusUpdate" parameterType="map">
         UPDATE student_course_application
-        SET course_status = #{courseStatus}
+        SET course_status = #{courseStatus, typeHandler=org.apache.ibatis.type.EnumTypeHandler}
         WHERE student_id = #{studentId} AND course_id = #{courseId}
     </update>
 
