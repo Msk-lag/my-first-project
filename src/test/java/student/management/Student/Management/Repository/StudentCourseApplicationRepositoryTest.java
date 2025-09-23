@@ -5,6 +5,7 @@ import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import student.management.Student.Management.data.StudentCourseApplication;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 

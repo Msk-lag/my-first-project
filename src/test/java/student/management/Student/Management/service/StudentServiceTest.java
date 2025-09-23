@@ -17,9 +17,11 @@ import student.management.Student.Management.data.StudentCourseApplication;
 import student.management.Student.Management.domain.StudentDetail;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -171,6 +173,15 @@ class StudentServiceTest {
         verify(courseRepository, times(1)).updateStudentCourse(studentCourse);
         verify(applicationRepository, times(1)).courseStatusUpdate(courseApplication);
     }
+
+    @Test
+    void 空のリストを渡しても例外がでない() {
+        List<StudentCourseApplication> actual =
+                sut.searchStudentsCourseApplicationNullCheck(Collections.emptyList());
+
+        assertThat(actual).isEmpty();
+    }
+
 
 }
 
