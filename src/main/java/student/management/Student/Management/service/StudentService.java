@@ -16,6 +16,7 @@ import student.management.Student.Management.domain.StudentDetail;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -58,6 +59,11 @@ public class StudentService {
 
     }
 
+    /**
+     * 受講生コース情報検索
+     *
+     * @return 受講生コース情報
+     */
     public List<StudentCourse> searchStudentCourseList() {
         return courseRepository.searchStudentCourseList();
     }
@@ -85,14 +91,13 @@ public class StudentService {
             initStudentsCourse(course, studentId, now);
             courseRepository.registerStudentCourse(course);
 
-            studentDetail.getStudentCourseApplicationsList().stream()
-                    .filter(app -> course.getCourseId().equals(app.getCourseId()))
-                    .forEach(app -> {
-                        initStudentsCourseApplication(app, course.getCourseId(), studentId);
-                        applicationRepository.registerCourseApplication(app);
-                    });
-        });
+            StudentCourseApplication courseApplication = new StudentCourseApplication();
+            initStudentsCourseApplication(courseApplication, course.getCourseId(), studentId);
+            applicationRepository.registerCourseApplication(courseApplication);
 
+            studentDetail.getStudentCourseApplicationsList().add(courseApplication);
+
+        });
         return studentDetail;
     }
 
@@ -104,6 +109,7 @@ public class StudentService {
      * @param now       　日付
      */
     private static void initStudentsCourse(StudentCourse course, String studentId, LocalDate now) {
+
         course.setCourseId(UUID.randomUUID().toString());
         course.setStudentId(studentId);
         course.setStartOfCourse(Date.valueOf(now));
@@ -124,7 +130,7 @@ public class StudentService {
         application.setApplicationId(UUID.randomUUID().toString());
         application.setStudentId(studentId);
         application.setCourseId(courseId);
-        application.setCourseStatus(ApplicationStatus.Provisional);
+        application.setCourseStatus(ApplicationStatus.PROVISIONAL);
     }
 
 
@@ -138,7 +144,7 @@ public class StudentService {
     public StudentDetail searchStudent(String id) {
         Student student = repository.searchStudent(id);
         List<StudentCourse> courses = courseRepository.searchStudentCourse(id);
-        List<StudentCourseApplication> courseStatus = applicationRepository.searchStudentsCourseApplication(List.of(id));
+        List<StudentCourseApplication> courseStatus = searchStudentsCourseApplicationNullCheck(List.of(id));
         return new StudentDetail(student, courses, courseStatus);
     }
 
@@ -170,7 +176,18 @@ public class StudentService {
                 .map(Student::getId)
                 .toList();
         List<StudentCourse> courses = courseRepository.getCoursesByStudents(studentIds);
-        List<StudentCourseApplication> courseStatus = applicationRepository.searchStudentsCourseApplication(studentIds);
+        List<StudentCourseApplication> courseStatus = searchStudentsCourseApplicationNullCheck(studentIds);
         return converter.convertStudentDetails(students, courses, courseStatus);
+    }
+
+    /**
+     * studentIds が null または空リスト場合空のリストを返す
+     * studentIds に値がある場合のみ、リポジトリに渡す
+     */
+    public List<StudentCourseApplication> searchStudentsCourseApplicationNullCheck(List<String> studentIds) {
+        if (studentIds == null || studentIds.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return applicationRepository.searchStudentsCourseApplication(studentIds);
     }
 }

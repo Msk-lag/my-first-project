@@ -5,13 +5,14 @@ import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import student.management.Student.Management.data.StudentCourseApplication;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import static student.management.Student.Management.data.ApplicationStatus.Official;
-import static student.management.Student.Management.data.ApplicationStatus.Provisional;
+import static student.management.Student.Management.data.ApplicationStatus.OFFICIAL;
+import static student.management.Student.Management.data.ApplicationStatus.PROVISIONAL;
 
 @MybatisTest
 class StudentCourseApplicationRepositoryTest {
@@ -37,13 +38,13 @@ class StudentCourseApplicationRepositoryTest {
                         "a1111111-1111-1111-1111-111111111111",
                         "0b0b0109-5f2a-4454-bc1b-5d1ccadcf80b",
                         "83bb2827-c655-49f8-b095-04efbf055ca2",
-                        Provisional
+                        PROVISIONAL
                 ),
                 new StudentCourseApplication(
                         "b2222222-2222-2222-2222-222222222222",
                         "550e8400-e29b-41d4-a716-446655440000",
                         "9f8c9c41-2a1b-4d62-9d25-111111111111",
-                        Official
+                        OFFICIAL
                 )
         );
         assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
@@ -61,7 +62,7 @@ class StudentCourseApplicationRepositoryTest {
                 UUID.randomUUID().toString(),
                 "0b0b0109-5f2a-4454-bc1b-5d1ccadcf80b",
                 "83bb2827-c655-49f8-b095-04efbf055ca2",
-                Provisional);
+                PROVISIONAL);
 
         sut.registerCourseApplication(studentCourseApplication);
 
@@ -76,7 +77,7 @@ class StudentCourseApplicationRepositoryTest {
                 (List.of("0b0b0109-5f2a-4454-bc1b-5d1ccadcf80b"));
 
         StudentCourseApplication expected = studentCourseApplication.get(0);
-        expected.setCourseStatus(Official);
+        expected.setCourseStatus(OFFICIAL);
 
         sut.courseStatusUpdate(expected);
 
@@ -84,6 +85,6 @@ class StudentCourseApplicationRepositoryTest {
                 (List.of("0b0b0109-5f2a-4454-bc1b-5d1ccadcf80b"));
         StudentCourseApplication actual = updateStudentCourseApplication.get(0);
 
-        assertThat(actual.getCourseStatus()).isEqualTo(Official);
+        assertThat(actual.getCourseStatus()).isEqualTo(OFFICIAL);
     }
 }

@@ -2,10 +2,7 @@ package student.management.Student.Management.controller.converter;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import student.management.Student.Management.Repository.StudentCourseRepository;
-import student.management.Student.Management.Repository.StudentRepository;
 import student.management.Student.Management.data.Student;
 import student.management.Student.Management.data.StudentCourse;
 import student.management.Student.Management.data.StudentCourseApplication;
@@ -14,8 +11,7 @@ import student.management.Student.Management.domain.StudentDetail;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-import static student.management.Student.Management.data.ApplicationStatus.Provisional;
+import static student.management.Student.Management.data.ApplicationStatus.PROVISIONAL;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -46,7 +42,7 @@ class StudentConverterTest {
         courseApplication.setApplicationId("g7777777-7777-7777-7777-777777777777");
         courseApplication.setStudentId(student.getId());
         courseApplication.setCourseId(studentCourse.getCourseId());
-        courseApplication.setCourseStatus(Provisional);
+        courseApplication.setCourseStatus(PROVISIONAL);
         List<StudentCourseApplication> studentCourseApplicationList = List.of(courseApplication);
 
 
@@ -81,7 +77,7 @@ class StudentConverterTest {
         courseApplication.setApplicationId("g7777777-7777-7777-7777-777777777777");
         courseApplication.setStudentId("123e4567-e89b-12d3-a456-426614174000");
         courseApplication.setCourseId("e7b1f8a2-4c3d-4f7a-9b2e-1d6f5a7c8b90");
-        courseApplication.setCourseStatus(Provisional);
+        courseApplication.setCourseStatus(PROVISIONAL);
         List<StudentCourseApplication> studentCourseApplication = List.of(courseApplication);
 
         StudentConverter converter = new StudentConverter();
@@ -107,7 +103,7 @@ class StudentConverterTest {
         courseApplication.setApplicationId("g7777777-7777-7777-7777-777777777777");
         courseApplication.setStudentId("123e4567-e89b-12d3-a456-426614174000");
         courseApplication.setCourseId(studentCourse.getCourseId());
-        courseApplication.setCourseStatus(Provisional);
+        courseApplication.setCourseStatus(PROVISIONAL);
         List<StudentCourseApplication> studentCourseApplicationList = List.of(courseApplication);
 
         StudentConverter converter = new StudentConverter();
