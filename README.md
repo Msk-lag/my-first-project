@@ -1,6 +1,6 @@
 # はじめに
-- 本アプリはjava学習者Msk-lagがRaiseTechで学習を進めていく中で作成したものになります
-- ご利用いただく際のトラブル等は一切責任を負いかねます
+- 本リポジトリはjava学習者Msk-lagがRaiseTechで学習を進めていく中で作成したものになります
+- ご利用に際して発生するトラブルについては責任を負いかねます
 # アプリ名
 受講生管理アプリ
 # アプリ概要
@@ -17,9 +17,51 @@
 そのため、APIの動作確認には **Postman**  を使用してください
 普段はリソース管理のためサーバーを閉じています  
 実際に動作確認したい方は **おわりに** へ記載しているメールアドレスまでご連絡ください
-# コマンド　
-- 
+## API一覧
+### 1. 受講生新規登録
+- **URL:** `http://StudentManagementALB-1815001307.ap-northeast-1.elb.amazonaws.com/registerStudent`
+- **Method:** POST
+- **説明:** JSON形式で新規受講生を登録します。
+
+---
+
+### 2. 受講生更新
+- **URL:** `http://StudentManagementALB-1815001307.ap-northeast-1.elb.amazonaws.com/updateStudent`
+- **Method:** PUT
+- **説明:** JSON形式で受講生情報を更新します。
+
+---
+
+### 3. 受講生一覧検索
+- **URL:** `http://StudentManagementALB-1815001307.ap-northeast-1.elb.amazonaws.com/studentList`
+- **Method:** GET
+- **説明:** 全受講生情報と紐づくコース・申し込み情報を取得します。
+
+---
+
+### 4. 受講生単一検索
+- **URL:** `http://StudentManagementALB-1815001307.ap-northeast-1.elb.amazonaws.com/student/{studentId}`
+- **Method:** GET
+- **説明:** 指定した受講生IDに紐づく生徒情報とコース・申し込み情報を取得します。
+
+---
+
+### 5. 絞り込み検索
+- **URL:** `http://StudentManagementALB-1815001307.ap-northeast-1.elb.amazonaws.com/students?fullName=&age=&gender=`
+- **Method:** GET
+- **説明:** 名前・年齢・性別のいずれか、または組み合わせで受講生情報を検索します。  
+  - 「名前」「年齢」「性別」のいずれかを必ず入力してください。  
+
+---
+
+**補足:**  
+- 全操作はデモ動画内で操作方法を確認できます。  
+- JSON形式のリクエストについては動画をご参照ください。
+
 # 実装予定の機能
 - フロントエンドの実装  
 - 「名前」「年齢」「性別」以外の要素でも検索できるよう絞り込み検索の拡張
-- コース情報の絞り込み検索の実装
+- コース情報の絞り込み検索の実装  
+# おわりに
+- 本リポジトリは、学習の一区切りとして公開させていただきました。
+- 感想やコメント等あれば**zapper2234@gmail.com**までご連絡いただけますと幸いです
