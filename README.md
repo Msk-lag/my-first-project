@@ -9,14 +9,14 @@
 # デモ動画
 - https://youtu.be/__7SCi1HuI8
 # 仕様技術
-## バックエンド  
+### バックエンド  
 ![Java](https://img.shields.io/badge/Java-21-%23ED8B00?logo=openjdk)
 ![Spring Boot](https://img.shields.io/badge/SpringBoot-3.5.0-%236DB33F?logo=spring)
-## インフラ DB  
+### インフラ DB  
 ![AWS EC2](https://img.shields.io/badge/AWS-EC2-%23FF9900?logo=amazon-aws)
 ![AWS RDS](https://img.shields.io/badge/AWS-RDS-%23232F3E?logo=amazon-aws)
 ![MySQL](https://img.shields.io/badge/MySQL-%234479A1?logo=mysql&logoColor=white)
-## 使用ツール  
+### 使用ツール  
 ![MyBatis](https://img.shields.io/badge/MyBatis-%23C73A36?logo=mybatis&logoColor=white)
 ![Lombok](https://img.shields.io/badge/Lombok-%23A52A2A?logo=lombok&logoColor=white)
 ![JUnit](https://img.shields.io/badge/JUnit-%2325A162?logo=junit5&logoColor=white)
