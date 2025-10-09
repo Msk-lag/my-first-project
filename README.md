@@ -18,6 +18,7 @@
 ![MySQL](https://img.shields.io/badge/MySQL-%234479A1?logo=mysql&logoColor=white)
 ## 使用ツール  
 ![MyBatis](https://img.shields.io/badge/MyBatis-%23C73A36?logo=mybatis&logoColor=white)
+![Lombok](https://img.shields.io/badge/Lombok-%23A52A2A?logo=lombok&logoColor=white)
 ![JUnit](https://img.shields.io/badge/JUnit-%2325A162?logo=junit5&logoColor=white)
 ![Postman](https://img.shields.io/badge/Postman-%23FF6C37?logo=postman&logoColor=white)
 ![Swagger](https://img.shields.io/badge/Swagger-%2385EA2D?logo=swagger&logoColor=white)
