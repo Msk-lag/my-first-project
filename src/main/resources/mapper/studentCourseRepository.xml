@@ -2,21 +2,21 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="student.management.Student.Management.Repository.StudentCourseRepository">
+<mapper namespace="management.Repository.StudentCourseRepository">
 
     <!--受講生のコース情報の全件検索 -->
-    <select id="searchStudentCourseList" resultType="student.management.Student.Management.data.StudentCourse">
+    <select id="searchStudentCourseList" resultType="management.data.StudentCourse">
         SELECT * FROM students_course
     </select>
 
     <!--受講生IDに紐づく受講生コース情報を検索 -->
-    <select id="searchStudentCourse" resultType="student.management.Student.Management.data.StudentCourse">
+    <select id="searchStudentCourse" resultType="management.data.StudentCourse">
         SELECT * FROM students_course
         WHERE student_id = #{studentId}
     </select>
 
     <!--受講生IDに紐づく受講生コース情報を検索#N+1問題対策の一括取得　受講生条件検索時に使用 -->
-    <select id="getCoursesByStudents" resultType="student.management.Student.Management.data.StudentCourse">
+    <select id="getCoursesByStudents" resultType="management.data.StudentCourse">
         SELECT * FROM students_course
         WHERE student_id IN
         <foreach item="id" collection="studentIds" open="(" separator="," close=")">

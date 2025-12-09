@@ -1,0 +1,38 @@
+package management.domain;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import management.data.Student;
+import management.data.StudentCourse;
+import management.data.StudentCourseApplication;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Schema(description = "受講生詳細")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class StudentDetail {
+
+    @Valid
+    private Student student;
+
+    @Valid
+    private List<StudentCourse> studentCourseList;
+
+    @Valid
+    private List<StudentCourseApplication> studentCourseApplicationsList;
+
+    public List<StudentCourseApplication> getStudentCourseApplicationsList() {
+        if (studentCourseApplicationsList == null) {
+            studentCourseApplicationsList = new ArrayList<>();
+        }
+        return studentCourseApplicationsList;
+    }
+}
